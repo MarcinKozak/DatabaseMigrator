@@ -40,7 +40,7 @@ class MigratorManager {
      * @return Schema[]
      */
     public function all() {
-        $connections    = (array) $this->config->get('connections', []);
+        $connections    = (array) $this->config->get('marcinkozak.databasemigrator.connections', []);
         $buildSchemas   = [];
 
         foreach($connections as $connection) {
