@@ -15,7 +15,7 @@ class DatabaseMigratorServiceProvider extends ServiceProvider
      */
     public function boot()  {
         $this->publishes([
-            __DIR__.'/../config/connections.php' => database_path('databasemigrator/connections'),
+            __DIR__.'/../config' => config_path('marcinkozak/databasemigrator'),
         ], 'config');
 
         $this->publishes([
@@ -32,4 +32,5 @@ class DatabaseMigratorServiceProvider extends ServiceProvider
         $this->commands(PopulateCommand::class);
         $this->commands(ClearCommand::class);
     }
+
 }

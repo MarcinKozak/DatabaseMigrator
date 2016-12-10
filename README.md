@@ -5,7 +5,7 @@ A simple console tool which help to migration database data from one to another 
 ### Features
 
 - Defining source and target database connection.
-- Allows to change target table name and columns.
+- Allows to change target table name and columns as well.
 - Transforms data for each processing rows.
 
 ### Installation
@@ -19,7 +19,7 @@ Or simply run:
 composer require marcinkozak/databasemigrator
 ```
 
-To make it available for Laravel open the ```config/app.php``` file and add below line.
+To make it available for Laravel open the ```config/app.php``` file and add line below.
 
 ```php
 'providers' => array(
