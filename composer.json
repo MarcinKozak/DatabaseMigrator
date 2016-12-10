@@ -1,0 +1,31 @@
+{
+  "name": "marcinkozak/databasemigrator",
+  "description": "Tool to migrate from a database to another one.",
+  "keywords": [
+    "laravel",
+    "laravel5",
+    "db",
+    "database",
+    "migration"
+  ],
+  "version": "0.1.0",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Marcin Kozak",
+      "email": "kontakt@marcinkozak.pl"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.6.0",
+    "illuminate/support": "~5",
+    "illuminate/database": "~5"
+  },
+  "autoload": {
+    "psr-4": {
+      "MarcinKozak\\DatabaseMigrator\\": "src/"
+    }
+  }
+}
