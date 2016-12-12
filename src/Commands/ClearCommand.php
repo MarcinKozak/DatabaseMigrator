@@ -3,11 +3,9 @@
 namespace MarcinKozak\DatabaseMigrator\Commands;
 
 use MarcinKozak\DatabaseMigrator\Contracts\TableMigrateContract;
-use MarcinKozak\DatabaseMigrator\Migrator;
 use MarcinKozak\DatabaseMigrator\MigratorManager;
-use MarcinKozak\DatabaseMigrator\Schema;
 use Illuminate\Console\Command;
-use Illuminate\Database\DatabaseManager;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 class ClearCommand extends Command implements TableMigrateContract {
@@ -83,6 +81,7 @@ class ClearCommand extends Command implements TableMigrateContract {
     /**
      * @param string $message
      * @return mixed
+     * @throws LogicException
      */
     public function commit($message) {
         $this->info($message);

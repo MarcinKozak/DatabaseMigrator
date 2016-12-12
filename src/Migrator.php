@@ -6,6 +6,7 @@ use MarcinKozak\DatabaseMigrator\Contracts\TableMigrateContract;
 use MarcinKozak\DatabaseMigrator\Exceptions\MigrationException;
 use MarcinKozak\DatabaseMigrator\Mappers\Table;
 use Illuminate\Database\Connection;
+use Exception;
 
 class Migrator {
 
@@ -62,7 +63,7 @@ class Migrator {
      *
      * @param TableMigrateContract $handler
      * @param Table $table
-     * @throws MigrationException
+     * @throws MigrationException|Exception
      */
     public function migrateTable(TableMigrateContract $handler, Table $table) {
         $handler->beginTransaction('Migration: [' . $table->getSourceTable() . '] -> [' . $table->getTargetTable() . ']');
@@ -109,7 +110,7 @@ class Migrator {
     /**
      * @param TableMigrateContract $handler
      * @param Table $table
-     * @throws MigrationException
+     * @throws MigrationException|Exception
      */
     public function clearTargetTable(TableMigrateContract $handler, Table $table) {
         $handler->beginTransaction('Clearing: [' . $table->getTargetTable() . ']');

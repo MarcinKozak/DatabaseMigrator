@@ -2,8 +2,8 @@
 
 return [
     [
-        'source'    => 'Source Connection Name',
-        'target'    => 'Target Connection Name',
+        'source'    => 'mysql2',
+        'target'    => 'mysql',
         'enabled'   => true,
         'schema'    => ExampleSchema::class,
     ],

@@ -24,11 +24,11 @@ class Table {
     /**
      * Table constructor.
      * @param string $sourceTableName
-     * @param string $targetTableName
+     * @param string|null $targetTableName
      */
-    public function __construct($sourceTableName, $targetTableName) {
+    public function __construct($sourceTableName, $targetTableName = null) {
         $this->sourceTableName = $sourceTableName;
-        $this->targetTableName = $targetTableName;
+        $this->targetTableName = ($targetTableName === null) ? $sourceTableName : $targetTableName;
     }
 
     /**

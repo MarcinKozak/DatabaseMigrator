@@ -4,7 +4,6 @@ namespace MarcinKozak\DatabaseMigrator;
 
 use Illuminate\Container\Container;
 use Illuminate\Database\DatabaseManager;
-use InvalidArgumentException;
 use Illuminate\Contracts\Config\Repository as Config;
 
 class MigratorManager {
