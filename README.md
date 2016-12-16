@@ -10,7 +10,7 @@ A simple console tool which helps to migrate database data from one to another u
 
 ### When to use
 
-Sometimes you can have an opportunity to make your custom database based on the existing one but in your opinion you can design it in the better way for example primary keys are not names simply as ```id``` but in the ```<table_name>_id pattern```, or columns values are not exactly what you want.
+Sometimes you can have an opportunity to make your custom database based on the existing one but in your opinion you can design it in better way for example primary keys are not names simply as ```id``` but in the ```<table_name>_id pattern```, or columns values are not exactly what you want.
 
 ### Installation
 
@@ -47,7 +47,7 @@ to publish new files in an application root:
 - ```config/marcinkozak/databasemigrator/connections.php```
 - ```database/schemas/ExampleSchema.php```
 
-The first file contains a collection of connections where each defined source and target DB connection, disabled/enabled state and class name of schema. 
+The first file contains a collection of connections where each of them defines source and target DB connection, disabled/enabled state and class name of schema. 
 
 ```php
 <?php
@@ -83,7 +83,7 @@ $table = new Table('source_table_name', 'target_table_name');
 
 ##### Defining columns
 
-This is a mandatory step to make migration work for the selected table. You can define a single column 
+This is a mandatory step to make migration works for the selected table. You can define a single column 
 
 ```php
 $column = new Column('column_name');
@@ -128,10 +128,9 @@ $column->map(function($value) {
 });
 ```
 
-If you want to make some relation which has poorly designed in the source table you can go with that way 
+If you want to make some relation which has poorly designed in the source table you can follow that way 
 
 ```php
-
 $data = DB::table('some_table')->pluck('id', 'some_column_name');
 
 $column = new Column('column_name');
