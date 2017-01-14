@@ -61,7 +61,7 @@ class Column {
             return call_user_func($this->valueMapper, $value);
         }
 
-        return utf8_encode($value);
+        return $value;
     }
 
 }

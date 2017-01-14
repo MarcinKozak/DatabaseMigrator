@@ -121,13 +121,15 @@ class Table {
 
     /**
      * @param stdClass[] $rows
+     * @param string $charsetIn
+     * @param string $charsetOut
      * @return array
      */
-    public function transform(array $rows) {
+    public function transform(array $rows, $charsetIn, $charsetOut) {
         $newRows = [];
 
         foreach($rows as $row) {
-            $newRows[] = $this->transformRow( (array) $row);
+            $newRows[] = $this->transformRow( (array) $row, $charsetIn, $charsetOut);
         }
 
         return $newRows;
@@ -135,16 +137,21 @@ class Table {
 
     /**
      * @param array $row
+     * @param string $charsetIn
+     * @param string $charsetOut
      * @return array
      */
-    protected function transformRow(array $row) {
+    protected function transformRow(array $row, $charsetIn, $charsetOut) {
         $newRow = [];
 
         foreach($row as $columnName => $value) {
             $columns = $this->getNewColumnNameBySource($columnName);
 
             foreach($columns as $column) {
-                $newRow[ $column->getNewName() ] = $column->getValue($value);
+                $newValue       = $column->getValue($value);
+                $encodedValue   = iconv($charsetIn, $charsetOut, $newValue);
+
+                $newRow[ $column->getNewName() ] = $encodedValue;
             }
         }
 

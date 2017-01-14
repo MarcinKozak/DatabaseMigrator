@@ -72,7 +72,9 @@ class Migrator {
             ->table($table->getSourceTable())
             ->count();
 
-        $affectedRows = 0;
+        $affectedRows   = 0;
+        $charsetIn      = $this->sourceConn->getConfig('charset');
+        $charsetOut     = $this->targetConn->getConfig('charset');
 
         $handler->notify('Rows number: ' . $count);
         $this->targetConn->beginTransaction();
@@ -81,8 +83,8 @@ class Migrator {
             $this->sourceConn
                 ->table($table->getSourceTable())
                 ->select($table->getSourceColumnNames())
-                ->chunk($this->chunkSize, function(array $rows) use($table, & $affectedRows, $count, $handler) {
-                    $inserts        = $table->transform($rows);
+                ->chunk($this->chunkSize, function(array $rows) use($table, & $affectedRows, $count, $handler, $charsetIn, $charsetOut) {
+                    $inserts        = $table->transform($rows, $charsetIn, $charsetOut);
                     $affectedRows   += count($rows);
                     $progress       = round($affectedRows / $count * 100, 2);
 
