@@ -152,7 +152,3 @@ The package has two Artisan methods.
 ##### Clearing target tables
 
 ```php artisan database-migrator:clear```
-
-### Known issues
-
-~~1. While developing this package I have had a task about doing migration DB data from MS SQL server to the MySQL. The source database contains polish chars so I have stuck due wrong characters conversions between databases. Till today I do not know how to solve that.~~

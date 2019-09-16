@@ -2,10 +2,10 @@
 
 namespace MarcinKozak\DatabaseMigrator\Commands;
 
-use MarcinKozak\DatabaseMigrator\Contracts\TableMigrateContract;
-use MarcinKozak\DatabaseMigrator\MigratorManager;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Exception\LogicException;
+use MarcinKozak\DatabaseMigrator\Contracts\TableMigrateContract;
+use MarcinKozak\DatabaseMigrator\Exceptions\MigrationException;
+use MarcinKozak\DatabaseMigrator\MigratorManager;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 class ClearCommand extends Command implements TableMigrateContract {
@@ -47,9 +47,9 @@ class ClearCommand extends Command implements TableMigrateContract {
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @throws MigrationException
      */
-    public function handle() {
+    public function handle() : void {
         $schemas = $this->migratorManager->all();
 
         foreach($schemas as $schema) {
@@ -64,26 +64,22 @@ class ClearCommand extends Command implements TableMigrateContract {
 
     /**
      * @param string $message
-     * @return mixed
      */
-    public function beginTransaction($message) {
+    public function beginTransaction(string $message) : void {
         $this->info($message);
     }
 
     /**
      * @param string $message
-     * @return mixed
      */
-    public function rollback($message) {
+    public function rollback(string $message) : void {
         $this->error($message);
     }
 
     /**
      * @param string $message
-     * @return mixed
-     * @throws LogicException
      */
-    public function commit($message) {
+    public function commit(string $message) : void {
         $this->info($message);
 
         $this->progressBar->advance();
@@ -91,9 +87,8 @@ class ClearCommand extends Command implements TableMigrateContract {
 
     /**
      * @param string $message
-     * @return mixed
      */
-    public function notify($message) {
+    public function notify(string $message) : void {
         $this->info($message);
     }
 

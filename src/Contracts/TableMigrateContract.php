@@ -6,26 +6,26 @@ interface TableMigrateContract {
 
     /**
      * @param string $message
-     * @return mixed
+     * @return void
      */
-    public function beginTransaction($message);
+    public function beginTransaction(string $message) : void;
 
     /**
      * @param string $message
-     * @return mixed
+     * @return void
      */
-    public function rollback($message);
+    public function rollback(string $message) : void;
 
     /**
      * @param string $message
-     * @return mixed
+     * @return void
      */
-    public function commit($message);
+    public function commit(string $message) : void;
 
     /**
      * @param string $message
-     * @return mixed
+     * @return void
      */
-    public function notify($message);
+    public function notify(string $message) : void;
 
 }

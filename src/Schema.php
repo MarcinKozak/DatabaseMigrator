@@ -20,10 +20,10 @@ abstract class Schema {
     /**
      * @return Migrator
      */
-    public function getMigrator() {
+    public function getMigrator() : Migrator {
         return $this->migrator;
     }
 
-    public abstract function setUp();
+    abstract public function setUp() : void;
 
 }

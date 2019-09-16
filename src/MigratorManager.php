@@ -3,8 +3,9 @@
 namespace MarcinKozak\DatabaseMigrator;
 
 use Illuminate\Container\Container;
-use Illuminate\Database\DatabaseManager;
 use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Database\DatabaseManager;
+use MarcinKozak\DatabaseMigrator\Exceptions\MigrationException;
 
 class MigratorManager {
 
@@ -37,23 +38,32 @@ class MigratorManager {
 
     /**
      * @return Schema[]
+     * @throws MigrationException
      */
-    public function all() {
+    public function all() : array {
         $connections    = (array) $this->config->get('marcinkozak.databasemigrator.connections', []);
         $buildSchemas   = [];
 
         foreach($connections as $connection) {
-            if(array_get($connection, 'enabled')) {
-                $sourceConn         = $this->databaseManager->connection($connection['source']);
-                $targetConn         = $this->databaseManager->connection($connection['target']);
-                $migrator           = new Migrator($sourceConn, $targetConn);
-                $schemaClassName    = array_get($connection, 'schema');
+            if($connection['enabled'] ?? false) {
+                $schemaClassName = $connection['schema'] ?? null;
 
                 if($schemaClassName) {
-                    $schema = new $schemaClassName($migrator);
-                    $schema->setUp();
+                    $sourceConn = $this->databaseManager->connection($connection['source']);
+                    $targetConn = $this->databaseManager->connection($connection['target']);
 
-                    $buildSchemas[] = $schema;
+                    $schema = new $schemaClassName(new Migrator($sourceConn, $targetConn));
+
+                    if($schema instanceof Schema) {
+                        $schema->setUp();
+
+                        $buildSchemas[] = $schema;
+                    }
+                    else {
+                        $message = sprintf('The schema [%s] is not instance of [%s]', $schema, Schema::class);
+                        throw new MigrationException($message);
+                    }
+
                 }
             }
         }

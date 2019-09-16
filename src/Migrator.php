@@ -2,11 +2,11 @@
 
 namespace MarcinKozak\DatabaseMigrator;
 
+use Exception;
+use Illuminate\Database\Connection;
 use MarcinKozak\DatabaseMigrator\Contracts\TableMigrateContract;
 use MarcinKozak\DatabaseMigrator\Exceptions\MigrationException;
 use MarcinKozak\DatabaseMigrator\Mappers\Table;
-use Illuminate\Database\Connection;
-use Exception;
 
 class Migrator {
 
@@ -43,7 +43,7 @@ class Migrator {
     /**
      * @param Table $table
      */
-    public function addTable(Table $table) {
+    public function addTable(Table $table) : void {
         $this->tables[] = $table;
     }
 
@@ -51,8 +51,9 @@ class Migrator {
      * Run the migration process for all added tables.
      *
      * @param TableMigrateContract $handler
+     * @throws MigrationException
      */
-    public function migrateTables(TableMigrateContract $handler) {
+    public function migrateTables(TableMigrateContract $handler) : void {
         foreach($this->tables as $table) {
             $this->migrateTable($handler, $table);
         }
@@ -63,9 +64,9 @@ class Migrator {
      *
      * @param TableMigrateContract $handler
      * @param Table $table
-     * @throws MigrationException|Exception
+     * @throws MigrationException
      */
-    public function migrateTable(TableMigrateContract $handler, Table $table) {
+    public function migrateTable(TableMigrateContract $handler, Table $table) : void {
         $handler->beginTransaction('Migration: [' . $table->getSourceTable() . '] -> [' . $table->getTargetTable() . ']');
 
         $count = $this->sourceConn
@@ -77,9 +78,10 @@ class Migrator {
         $charsetOut     = $this->targetConn->getConfig('charset');
 
         $handler->notify('Rows number: ' . $count);
-        $this->targetConn->beginTransaction();
 
         try {
+            $this->targetConn->beginTransaction();
+
             $this->sourceConn
                 ->table($table->getSourceTable())
                 ->select($table->getSourceColumnNames())
@@ -95,15 +97,18 @@ class Migrator {
             $this->targetConn->commit();
             $handler->commit('Success');
         }
-        catch(MigrationException $e) {
+        catch(Exception $e) {
             $handler->rollback($e->getMessage() . "\n\r" . $e->getTraceAsString());
+
+            throw new MigrationException($e->getMessage());
         }
     }
 
     /**
      * @param TableMigrateContract $handler
+     * @throws MigrationException
      */
-    public function clear(TableMigrateContract $handler) {
+    public function clear(TableMigrateContract $handler) : void {
         foreach(array_reverse($this->tables) as $table) {
             $this->clearTargetTable($handler, $table);
         }
@@ -112,32 +117,33 @@ class Migrator {
     /**
      * @param TableMigrateContract $handler
      * @param Table $table
-     * @throws MigrationException|Exception
+     * @throws MigrationException
      */
-    public function clearTargetTable(TableMigrateContract $handler, Table $table) {
+    public function clearTargetTable(TableMigrateContract $handler, Table $table) : void {
         $handler->beginTransaction('Clearing: [' . $table->getTargetTable() . ']');
 
-        $this->targetConn->beginTransaction();
-
         try {
+            $this->targetConn->beginTransaction();
             $this->targetConn->table($table->getTargetTable())->truncate();
 
             $this->targetConn->commit();
             $handler->commit('Success');
         }
-        catch(MigrationException $e) {
+        catch(Exception $e) {
             $handler->rollback($e->getMessage() . "\n\r" . $e->getTraceAsString());
+
+            throw new MigrationException($e->getMessage());
         }
     }
 
     /**
      * @return int
      */
-    public function getTablesCount() {
+    public function getTablesCount() : int {
         return count($this->tables);
     }
 
-    public function disconnect() {
+    public function disconnect() : void {
         $this->sourceConn->disconnect();
         $this->targetConn->disconnect();
     }

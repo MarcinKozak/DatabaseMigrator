@@ -6,7 +6,7 @@ use MarcinKozak\DatabaseMigrator\Mappers\Column;
 
 class ExampleSchema extends Schema {
 
-    public function setUp() {
+    public function setUp() : void {
         $table = new Table('kittens', 'cats');
         $table->schema([
             'kitten_id' => 'id',
@@ -17,7 +17,7 @@ class ExampleSchema extends Schema {
         $this->migrator->addTable($table);
 
         $colorColumn = new Column('color', 'colour');
-        $colorColumn->map(function ($value) {
+        $colorColumn->map(static function ($value) {
             return '#' . $value;
         });
 

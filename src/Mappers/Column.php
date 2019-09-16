@@ -26,7 +26,7 @@ class Column {
      * @param string $name
      * @param string|null $newName
      */
-    public function __construct($name, $newName = null) {
+    public function __construct(string $name, string $newName = null) {
         $this->name     = $name;
         $this->newName  = $newName ?: $name;
     }
@@ -34,21 +34,21 @@ class Column {
     /**
      * @return string
      */
-    public function getName() {
+    public function getName() : string {
         return $this->name;
     }
 
     /**
      * @return string
      */
-    public function getNewName() {
+    public function getNewName() : string {
         return $this->newName;
     }
 
     /**
      * @param Closure $closure
      */
-    public function map(Closure $closure) {
+    public function map(Closure $closure) : void {
         $this->valueMapper = $closure;
     }
 
